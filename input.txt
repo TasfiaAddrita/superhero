@@ -1,0 +1,10 @@
+Avengers
+1
+Iron Man
+1
+Mad Genius
+40
+2
+Shoot lasers from hands
+100
+4
