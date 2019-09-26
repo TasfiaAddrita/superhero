@@ -3,7 +3,7 @@ import random
 class Ability:
     def __init__(self, name, max_damage):
         self.name = name
-        self.max_damage = max_damage
+        self.max_damage = int(max_damage)
 
     def attack(self):
         return random.randint(0, self.max_damage)
@@ -15,7 +15,7 @@ class Weapon(Ability):
 class Armor:
     def __init__(self, name, max_block):
         self.name = name
-        self.max_block = max_block
+        self.max_block = int(max_block)
 
     def block(self):
         return random.randint(0, self.max_block)
@@ -47,8 +47,11 @@ class Hero:
 
     def attack(self):
         total_damage = 0
-        for ability in self.abilities:
-            total_damage += ability.attack()
+        # for ability in self.abilities:
+            # total_damage += ability.attack()
+        ability = self.abilities[random.randint(0, len(self.abilities)-1)]
+        total_damage = ability.attack()
+        print(f"{self.name} used '{ability.name}' that caused {total_damage} damage!")
         return total_damage
 
     def defend(self):
@@ -67,19 +70,25 @@ class Hero:
             return False
 
     def fight(self, opponent):
+        print(f"{self.name} starting health is {self.starting_health}.")
+        print(f"{opponent.name} starting health is {opponent.starting_health}.\n")
         if len(self.abilities) == 0 and len(opponent.abilities) == 0:
             return print("Draw!")
         while self.is_alive() and opponent.is_alive():
             self.take_damage(opponent.attack())
+            print(f"{self.name} current health is {self.current_health}.")
             opponent.take_damage(self.attack())
+            print(f"{opponent.name} current health is {opponent.current_health}.\n")
         if self.is_alive() == False:
             self.add_death(1)
             opponent.add_kill(1)
-            return print(f"{opponent.name} won!")
+            print(f"{opponent.name} won!")
+            print(f"{self.name} lost.\n")
         else:
             self.add_kill(1)
             opponent.add_death(1)
-            return print(f"{self.name} won!")
+            print(f"{self.name} won!")
+            print(f"{opponent.name} lost.\n")
 
 class Team:
     def __init__(self, name):
@@ -131,8 +140,8 @@ class Team:
 
 class Arena:
     def __init__(self):
-        self.team_one = None
-        self.team_two = None
+        self.team_one = []
+        self.team_two = []
 
     def create_ability(self):
         ability_name = input("Name of ability: ")
@@ -158,9 +167,9 @@ class Arena:
         add_item = None
         while add_item != "4":
             add_item = input("[1] Add ability\n[2] Add weapon\n[3] Add armor\n[4] Done adding items\n\n")
-            if add_item not in range(1, 5):
-                print("Please enter a value between 1-4")
-            elif add_item == "1":
+            # if add_item not in range(1, 5):
+            #     print("Please enter a value between 1-4")
+            if add_item == "1":
                 ability = self.create_ability()
                 hero.add_ability(ability)
             elif add_item == "2":
@@ -186,7 +195,7 @@ class Arena:
         num_heroes = int(input("Number of heroes in Team 2: "))
         for index in range(num_heroes):
             hero = self.create_hero()
-            team_one.add_hero(hero)
+            team_two.add_hero(hero)
         self.team_two = team_two
 
     def team_battle(self):
@@ -194,7 +203,7 @@ class Arena:
         # TODO: This method should battle the teams together.
         # Call the attack method that exists in your team objects
         # for that battle functionality.
-        self.team_one.fight(team_two)
+        self.team_one.attack(self.team_two)
 
     def show_stats(self):
         '''Prints team statistics to terminal.'''
@@ -204,7 +213,23 @@ class Arena:
         #     Declare winning team
         #     Show both teams average kill/death ratio.
         #     Show surviving heroes.
-        if len(self.team_one) > len(self.team_two):
+        # print(len(self.team_one.heroes), len(self.team_two.heroes))
+        # if len(self.team_one.heroes) > len(self.team_two.heroes):
+        #     print("Team 1 won!")
+        # else:
+        #     print("Team 2 won!")
+
+        team_one_alive_count = 0
+        for hero in self.team_one.heroes:
+            if hero.is_alive():
+                team_one_alive_count += 1
+
+        team_two_alive_count = 0
+        for hero in self.team_two.heroes:
+            if hero.is_alive():
+                team_two_alive_count += 1
+
+        if team_one_alive_count > team_two_alive_count:
             print("Team 1 won!")
         else:
             print("Team 2 won!")
@@ -212,28 +237,33 @@ class Arena:
         team_one_kills = 0
         team_one_deaths = 0
 
-        for hero in self.team_one:
+        for hero in self.team_one.heroes:
             team_one_kills += hero.kills
             team_one_deaths += hero.deaths
 
-        team_one_average_kills = team_one_kills / len(self.team_one)
+        team_one_average_kills = team_one_kills / len(self.team_one.heroes)
+        team_one_average_deaths = team_one_deaths / len(self.team_one.heroes)
 
         team_two_kills = 0
         team_two_deaths = 0
 
-        for hero in self.team_two:
+        for hero in self.team_two.heroes:
             team_two_kills += hero.kills
             team_two_deaths += hero.deaths
 
-        team_two_average_kills = team_two_kills / len(self.team_two)
+        team_two_average_kills = team_two_kills / len(self.team_two.heroes)
+        team_two_average_deaths = team_two_deaths / len(self.team_two.heroes)
+
+        print(f"team one's average kill/death: {team_one_average_kills}/{team_one_average_deaths}")
+        print(f"team two's average kill/death: {team_two_average_kills}/{team_two_average_deaths}\n")
 
         print("surviving heroes in team 1: ")
-        for hero in self.team_one:
+        for hero in self.team_one.heroes:
             if hero.is_alive():
                 print(hero.name)
 
-        print("surviving heroes in team 2: ")
-        for hero in self.team_two:
+        print("\nsurviving heroes in team 2: ")
+        for hero in self.team_two.heroes:
             if hero.is_alive():
                 print(hero.name)
 
@@ -286,7 +316,7 @@ if __name__ == "__main__":
     arena = Arena()
     arena.build_team_one()
     arena.team_one.view_all_heroes()
-    arena.team_one[0].abilities
-    # arena.build_team_two()
-    # arena.team_battle()
-    # arena.show_stats()
+    # print(arena.team_one.heroes)
+    arena.build_team_two()
+    arena.team_battle()
+    arena.show_stats()

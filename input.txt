@@ -1,5 +1,5 @@
 Avengers
-1
+2
 Iron Man
 1
 Mad Genius
@@ -7,4 +7,26 @@ Mad Genius
 2
 Shoot lasers from hands
 100
+4
+Black Widow
+1
+badass assassin
+50
+4
+Black Order
+2
+Thanos
+2
+Infinity Stone Gauntlet
+500
+4
+Ebony Maw
+1
+Read minds
+40
+4
+Herpa Derpa
+3
+Invisible shield
+50
 4
