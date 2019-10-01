@@ -117,6 +117,7 @@ class Team:
         return 0
 
     def view_all_heroes(self):
+        print(f"\n {self.name}'s Heros: ")
         for hero in self.heroes:
             print(hero.name)
 
@@ -187,7 +188,7 @@ class Arena:
         hero = Hero(hero_name)
         add_item = None
         while add_item != "4":
-            add_item = input("[1] Add ability\n[2] Add weapon\n[3] Add armor\n[4] Done adding items\n\n")
+            add_item = input("[1] Add ability\n[2] Add weapon\n[3] Add armor\n[4] Done adding items\n\nYour choice: ")
             # if add_item not in range(1, 5):
             #     print("Please enter a value between 1-4")
             if add_item == "1":
@@ -291,7 +292,24 @@ class Arena:
         if team_two_alive_count == 0:
             print("No one survived.")
 
+        self.team_one.revive_heroes()
+        self.team_two.revive_heroes()
+
+def main():
+    repeat = 'y'
+    arena = Arena()
+    arena.build_team_one()
+    arena.team_one.view_all_heroes()
+    arena.build_team_two()
+    while (repeat == 'y'):
+        arena.team_battle()
+        arena.show_stats()
+
+        repeat = input("\nWant to play again?: ").lower()
+
 if __name__ == "__main__":
+    main()
+
     # ability = Ability("Debugging Ability", 20)
     # print(ability.name)
     # print(ability.attack())
@@ -336,10 +354,3 @@ if __name__ == "__main__":
     # hero2.add_ability(ability3)
     # hero2.add_ability(ability4)
     # hero1.fight(hero2)
-
-    arena = Arena()
-    arena.build_team_one()
-    arena.team_one.view_all_heroes()
-    arena.build_team_two()
-    arena.team_battle()
-    arena.show_stats()
