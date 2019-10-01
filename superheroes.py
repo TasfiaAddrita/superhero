@@ -1,14 +1,25 @@
 import random
 
 class Ability:
+    '''
+    Instantiate instance properties.
+        name: String
+        max_block: Integer
+    '''
     def __init__(self, name, max_damage):
         self.name = name
         self.max_damage = int(max_damage)
 
+    ''' Return a value between 0 and the value set by self.max_damage.'''
+    # TODO: Use random.randint(a, b) to select a random attack value.
+    # Return an attack value between 0 and the full attack.
+    # Hint: The constructor initializes the maximum attack value.
     def attack(self):
         return random.randint(0, self.max_damage)
 
 class Weapon(Ability):
+    ''' Current Hero will take turns fighting the opponent hero passed in. ''' 
+    # TODO: Fight each hero until a victor emerges. # Print the victor's name to the screen.
     def attack(self):
         return random.randint(self.max_damage // 2, self.max_damage)
 
@@ -21,6 +32,14 @@ class Armor:
         return random.randint(0, self.max_block)
 
 class Hero:
+    '''
+    Instance properties:
+        abilities: List
+        armors: List
+        name: String
+        starting_health: Integer
+        current_health: Integer
+    '''
     def __init__(self, name, starting_health=100):
         self.abilities = []
         self.armors = []
@@ -39,9 +58,13 @@ class Hero:
     def add_armor(self, armor):
         self.armors.append(armor)
 
+    ''' Update kills with num_kills'''
+    # TODO: This method should add the number of kills to self.kills
     def add_kill(self, num_kills):
         self.kills += num_kills
 
+    ''' Update deaths with num_deaths'''
+    # TODO: This method should add the number of deaths to self.deaths
     def add_death(self, num_deaths):
         self.deaths += num_deaths
 
@@ -62,18 +85,29 @@ class Hero:
         return 0
 
     def take_damage(self, damage):
+        '''
+        Updates self.current_health to reflect the damage minus the defense.
+        '''
+        # TODO: Create a method that updates self.current_health to the current
+        # minus the the amount returned from calling self.defend(damage).
         damage_total = damage - self.defend()
         if damage_total < 0:
             damage_total = 0
         self.current_health -= damage_total
 
     def is_alive(self):
+        '''
+        Return True or False depending on whether the hero is alive or not.
+        '''
+        # TODO: Check whether the hero is alive and return true or false
         if self.current_health > 0:
             return True
         else:
             return False
 
     def fight(self, opponent):
+        ''' Current Hero will take turns fighting the opponent hero passed in. ''' 
+        # TODO: Fight each hero until a victor emerges. # Print the victor's name to the screen.
         print(f"{self.name}'s starting health is {self.starting_health}.")
         print(f"{opponent.name}'s starting health is {opponent.starting_health}.\n")
         # if len(self.abilities) == 0 and len(opponent.abilities) == 0:
@@ -102,20 +136,29 @@ class Hero:
             print(f"{opponent.name} lost.\n")
 
 class Team:
+    ''' Initialize your team with its team name'''
+    # TODO: Implement this constructor by assigning the name and heroes, which should be an empty list
     def __init__(self, name):
         self.name = name
         self.heroes = []
         self.heroes_died = 0
 
+    '''Add Hero object to self.heroes.'''
+    # TODO: Add the Hero object that is passed in to the list of heroes in
+    # self.heroes
     def add_hero(self, hero):
         self.heroes.append(hero)
 
+    '''Remove hero from heroes list. If Hero isn't found return 0.'''
+    # TODO: Implement this method to remove the hero from the list given their name.
     def remove_hero(self, param_hero):
         for hero in self.heroes:
             if hero.name == param_hero:
                 self.heroes.remove(hero)
         return 0
 
+    '''Prints out all heroes to the console.'''
+    # TODO: Loop over the list of heroes and print their names to the terminal.
     def view_all_heroes(self):
         print(f"\n {self.name}'s Heros: ")
         for hero in self.heroes:
